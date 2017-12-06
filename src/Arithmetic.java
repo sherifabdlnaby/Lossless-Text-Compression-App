@@ -114,12 +114,8 @@ public class Arithmetic {
         return decodedString.toString();
     }
 
-    public static boolean Compress(String fileName, String filePath) {
-        String inputString = "";
+    public static boolean Compress(String inputString, String fileName, String filePath) {
         try {
-            //Read Original File into String
-            inputString = new String(Files.readAllBytes(Paths.get(filePath + "/" +fileName)));
-
             //Algorithm
             LinkedHashMap<Character, Double> probFillTable = new LinkedHashMap<>();
             List<Double> EncodedDecimals = ArithmeticEncoding(inputString, probFillTable);

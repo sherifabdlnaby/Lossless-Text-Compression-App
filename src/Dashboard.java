@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 public class Dashboard extends JPanel {
@@ -59,7 +62,49 @@ public class Dashboard extends JPanel {
                     case "art":
                         decompressType.setText("Arithmetic Coding");
                         break;
+                    default:
+                        compressButton.setEnabled(false);
+                        decompressButton.setEnabled(false);
+                        JOptionPane.showMessageDialog(null,"Invalid Extension. \n Only *.txt, *.lz77, *.lzw, *.huffman, *.art are supported");
                 }
+            }
+        });
+
+        compressButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Calculate total Selected
+                int i = 0;
+                if(LZ77.isSelected()) ++i;
+                if(LZW.isSelected()) ++i;
+                if(Huffman.isSelected()) ++i;
+                if(Arithmetic.isSelected()) ++i;
+
+                String filePath = File.getParent();
+                String fileName = File.getName();
+                try {
+                    String inputString = new String(Files.readAllBytes(Paths.get(File.getAbsolutePath())));
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(null,"Can't Open File");
+                    e1.printStackTrace();
+                    return;
+                }
+
+                if(LZ77.isSelected()){
+                    new Thread(new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                        }
+
+                    }).start();
+                }
+                if(LZW.isSelected()) ++i;
+                if(Huffman.isSelected()) ++i;
+                if(Arithmetic.isSelected()) ++i;
+
+
             }
         });
     }

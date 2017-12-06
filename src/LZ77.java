@@ -98,9 +98,7 @@ public class LZ77 {
         return orignialString;
     }
 
-    public static boolean Compress(String fileName, String filePath) {
-        FileReader input;
-        String inputString = "";
+    public static boolean Compress(String inputString, String fileName, String filePath) {
         try {
             //Read Original File into String
             inputString = new String(Files.readAllBytes(Paths.get(filePath + "/" +fileName)));
