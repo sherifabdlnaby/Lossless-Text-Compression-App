@@ -1,5 +1,3 @@
-package com.multimedia.gui;
-
 public class Tag implements java.io.Serializable {
     int Position;
     int Length;
