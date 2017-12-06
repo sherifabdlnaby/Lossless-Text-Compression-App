@@ -35,7 +35,7 @@
           </component>
         </children>
       </scrollpane>
-      <component id="da4bb" class="javax.swing.JCheckBox" binding="LZ77">
+      <component id="da4bb" class="javax.swing.JCheckBox" binding="LZ77Select">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -45,7 +45,7 @@
           <toolTipText value="Lempel Ziv 1977"/>
         </properties>
       </component>
-      <component id="8ea1e" class="javax.swing.JCheckBox" binding="LZW">
+      <component id="8ea1e" class="javax.swing.JCheckBox" binding="LZWSelect">
         <constraints>
           <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -55,7 +55,7 @@
           <toolTipText value="Lempel Ziv Welch"/>
         </properties>
       </component>
-      <component id="c5258" class="javax.swing.JCheckBox" binding="Huffman">
+      <component id="c5258" class="javax.swing.JCheckBox" binding="HuffmanSelect">
         <constraints>
           <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -65,7 +65,7 @@
           <toolTipText value="Huffman Encoding"/>
         </properties>
       </component>
-      <component id="d9f4e" class="javax.swing.JCheckBox" binding="Arithmetic">
+      <component id="d9f4e" class="javax.swing.JCheckBox" binding="ArithmeticSelect">
         <constraints>
           <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -97,6 +97,7 @@
         </constraints>
         <properties>
           <stringPainted value="true"/>
+          <value value="0"/>
         </properties>
       </component>
       <component id="f458c" class="javax.swing.JLabel">
