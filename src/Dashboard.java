@@ -21,6 +21,7 @@ public class Dashboard extends JPanel {
     private JProgressBar progressBar1;
     private JButton decompressButton;
     private JTextField decompressType;
+    private JLabel algorithmsLabel;
     private File File;
     public Dashboard() {
         browseButton.addActionListener(new ActionListener() {
@@ -33,6 +34,7 @@ public class Dashboard extends JPanel {
                 String extension = File.getName();
                 extension = extension.substring(extension.lastIndexOf('.')+1);
                 compressButton.setEnabled(false);
+                algorithmsLabel.setEnabled(false);
                 decompressButton.setEnabled(true);
                 LZ77Select.setEnabled(false);
                 LZWSelect.setEnabled(false);
@@ -41,6 +43,7 @@ public class Dashboard extends JPanel {
                 switch (extension) {
                     case "txt":
                         compressButton.setEnabled(true);
+                        algorithmsLabel.setEnabled(true);
                         decompressButton.setEnabled(false);
                         decompressType.setText("");
                         LZ77Select.setEnabled(true);
@@ -73,6 +76,7 @@ public class Dashboard extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 //Kinda a Hack-y code style, I'd rather not do that If I have time.
                 compressButton.setEnabled(false);
+                algorithmsLabel.setEnabled(false);
                 Thread procces = new Thread(() -> {
                     //Calculate total Selected
                     int i = 0;
@@ -105,7 +109,7 @@ public class Dashboard extends JPanel {
                                 "- Original Size = " + originalFileSize + " Byte.\n" +
                                 "- New Compressed Size = " + newFileSize + " Byte.\n" +
                                 "- Saved Bytes = " + savedBytes + " Byte.\n" +
-                                "- Compression = " + (savedRatio > 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
+                                "- Compression = " + (savedRatio < 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
                                 (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
                         );
                         progressBar1.setValue(progressBar1.getValue() + incrementValue);
@@ -123,7 +127,7 @@ public class Dashboard extends JPanel {
                                         "- Original Size = " + originalFileSize + " Byte.\n" +
                                         "- New Compressed Size = " + newFileSize + " Byte.\n" +
                                         "- Saved Bytes = " + savedBytes + " Byte.\n" +
-                                        "- Compression = " + (savedRatio > 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
+                                        "- Compression = " + (savedRatio < 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
                                         (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
                         );
                         progressBar1.setValue(progressBar1.getValue() + incrementValue);
@@ -141,7 +145,7 @@ public class Dashboard extends JPanel {
                                         "- Original Size = " + originalFileSize + " Byte.\n" +
                                         "- New Compressed Size = " + newFileSize + " Byte.\n" +
                                         "- Saved Bytes = " + savedBytes + " Byte.\n" +
-                                        "- Compression = " + (savedRatio > 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
+                                        "- Compression = " + (savedRatio < 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
                                         (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
                         );
                         progressBar1.setValue(progressBar1.getValue() + incrementValue);
@@ -159,13 +163,14 @@ public class Dashboard extends JPanel {
                                         "- Original Size = " + originalFileSize + " Byte.\n" +
                                         "- New Compressed Size = " + newFileSize + " Byte.\n" +
                                         "- Saved Bytes = " + savedBytes + " Byte.\n" +
-                                        "- Compression = " + (savedRatio > 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
+                                        "- Compression = " + (savedRatio < 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
                                         (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
                         );
                         progressBar1.setValue(progressBar1.getValue() + incrementValue);
                         progressBar1.repaint();
                     }
                     compressButton.setEnabled(true);
+                    algorithmsLabel.setEnabled(true);
                 });
                 procces.start();
             }
@@ -178,6 +183,7 @@ public class Dashboard extends JPanel {
                 String filePath = File.getParent();
                 String fileName = File.getName();
                 compressButton.setEnabled(false);
+                algorithmsLabel.setEnabled(false);
                 progressBar1.setValue(0);
                 console.setText("Running... \n");
                 final String extensionFinal = extension;
@@ -202,7 +208,7 @@ public class Dashboard extends JPanel {
                     );
                     progressBar1.setValue(100);
                     progressBar1.repaint();
-                    compressButton.setEnabled(true);
+                    decompressButton.setEnabled(true);
                 });
                 procces.start();
             }
@@ -210,7 +216,7 @@ public class Dashboard extends JPanel {
     }
 
     public static void main(String[] args) {
-        JFrame jFrame = new JFrame("Restaurant Simulation");
+        JFrame jFrame = new JFrame("Lossless Text Compression");
         jFrame.setContentPane(new Dashboard().Panel);
         jFrame.setDefaultCloseOperation(jFrame.EXIT_ON_CLOSE);
         jFrame.pack();
