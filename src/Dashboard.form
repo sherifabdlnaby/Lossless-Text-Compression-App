@@ -29,7 +29,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="d7e6c" class="javax.swing.JTextArea" binding="NamesField">
+          <component id="d7e6c" class="javax.swing.JTextArea" binding="console">
             <constraints/>
             <properties/>
           </component>

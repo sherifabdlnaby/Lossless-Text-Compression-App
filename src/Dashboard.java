@@ -12,7 +12,7 @@ public class Dashboard extends JPanel {
     private JPanel Panel;
     private JTextField filePathField;
     private JButton browseButton;
-    private JTextArea NamesField;
+    private JTextArea console;
     private JCheckBox LZ77Select;
     private JCheckBox LZWSelect;
     private JCheckBox HuffmanSelect;
@@ -80,10 +80,11 @@ public class Dashboard extends JPanel {
                     if (LZWSelect.isSelected()) ++i;
                     if (HuffmanSelect.isSelected()) ++i;
                     if (ArithmeticSelect.isSelected()) ++i;
-                    int incrmentValue = (int) ((1 / (double) i) * 100);
+                    int incrementValue = (int) ((1 / (double) i) * 100);
                     String filePath = File.getParent();
                     String fileName = File.getName();
                     String inputString = "";
+                    Long originalFileSize = File.length();
                     try {
                         inputString = new String(Files.readAllBytes(Paths.get(File.getAbsolutePath())));
                     } catch (IOException e1) {
@@ -92,37 +93,104 @@ public class Dashboard extends JPanel {
                         return;
                     }
                     progressBar1.setValue(0);
-
+                    console.setText("Running... \n");
                     if (LZ77Select.isSelected()) {
-                        String finalInputString = inputString;
-                        LZ77.Compress(finalInputString, fileName, filePath);
-                        progressBar1.setValue(progressBar1.getValue() + incrmentValue);
+                        Long newFileSize = LZ77.Compress(inputString, fileName, filePath);
+                        long savedBytes = originalFileSize - newFileSize;
+                        int  ratio = (int)((double)newFileSize/originalFileSize * 100);
+                        int  savedRatio = 100 - ratio;
+                        console.append(
+                                "================================================== \n" +
+                                "LZ77 Completed 100% \n" +
+                                "- Original Size = " + originalFileSize + " Byte.\n" +
+                                "- New Compressed Size = " + newFileSize + " Byte.\n" +
+                                "- Saved Bytes = " + savedBytes + " Byte.\n" +
+                                "- Compression = " + savedRatio * -1 + "%. The Original Size\n" +
+                                (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
+                        );
+                        progressBar1.setValue(progressBar1.getValue() + incrementValue);
                         progressBar1.repaint();
                     }
 
                     if (LZWSelect.isSelected()) {
-                        String finalInputString = inputString;
-                        LZW.Compress(finalInputString, fileName, filePath);
-                        progressBar1.setValue(progressBar1.getValue() + incrmentValue);
+                        Long newFileSize = LZW.Compress(inputString, fileName, filePath);
+                        long savedBytes = originalFileSize - newFileSize;
+                        int  ratio = (int)((double)newFileSize/originalFileSize *100);
+                        int  savedRatio = 100 - ratio;
+                        console.append(
+                                        "================================================== \n" +
+                                        "LZW Completed 100% \n" +
+                                        "- Original Size = " + originalFileSize + " Byte.\n" +
+                                        "- New Compressed Size = " + newFileSize + " Byte.\n" +
+                                        "- Saved Bytes = " + savedBytes + " Byte.\n" +
+                                        "- Compression = " + savedRatio * -1 + "%. The Original Size\n" +
+                                        (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
+                        );
+                        progressBar1.setValue(progressBar1.getValue() + incrementValue);
                         progressBar1.repaint();
                     }
 
                     if (HuffmanSelect.isSelected()) {
-                        String finalInputString = inputString;
-                        Huffman.Compress(finalInputString, fileName, filePath);
-                        progressBar1.setValue(progressBar1.getValue() + incrmentValue);
+                        Long newFileSize = Huffman.Compress(inputString, fileName, filePath);
+                        long savedBytes = originalFileSize - newFileSize;
+                        int  ratio = (int)((double)newFileSize/originalFileSize *100);
+                        int  savedRatio = 100 - ratio;
+                        console.append(
+                                        "================================================== \n" +
+                                        "Huffman Encoding Completed 100% \n" +
+                                        "- Original Size = " + originalFileSize + " Byte.\n" +
+                                        "- New Compressed Size = " + newFileSize + " Byte.\n" +
+                                        "- Saved Bytes = " + savedBytes + " Byte.\n" +
+                                        "- Compression = " + savedRatio * -1 + "%. The Original Size\n" +
+                                        (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
+                        );
+                        progressBar1.setValue(progressBar1.getValue() + incrementValue);
                         progressBar1.repaint();
                     }
 
                     if (ArithmeticSelect.isSelected()) {
-                        String finalInputString = inputString;
-                        Arithmetic.Compress(finalInputString, fileName, filePath);
-                        progressBar1.setValue(progressBar1.getValue() + incrmentValue);
+                        Long newFileSize = Arithmetic.Compress(inputString, fileName, filePath);
+                        long savedBytes = originalFileSize - newFileSize;
+                        int  ratio = (int)((double)newFileSize/originalFileSize *100);
+                        int  savedRatio = 100 - ratio;
+                        console.append(
+                                        "================================================== \n" +
+                                        "Arithmetic Coding Completed 100% \n" +
+                                        "- Original Size = " + originalFileSize + " Byte.\n" +
+                                        "- New Compressed Size = " + newFileSize + " Byte.\n" +
+                                        "- Saved Bytes = " + savedBytes + " Byte.\n" +
+                                        "- Compression = " + savedRatio * -1 + "%. The Original Size\n" +
+                                        (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
+                        );
+                        progressBar1.setValue(progressBar1.getValue() + incrementValue);
                         progressBar1.repaint();
                     }
                     compressButton.setEnabled(true);
                 });
                 procces.start();
+            }
+        });
+        decompressButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String extension = File.getName();
+                extension = extension.substring(extension.lastIndexOf('.')+1);
+                String filePath = File.getParent();
+                String fileName = File.getName();
+                switch (extension) {
+                    case "lz77":
+                        LZ77.Decompress(fileName, filePath);
+                        break;
+                    case "lzw":
+                        LZW.Decompress(fileName, filePath);
+                        break;
+                    case "huffman":
+                        Huffman.Decompress(fileName, filePath);
+                        break;
+                    case "art":
+                        Arithmetic.Decompress(fileName, filePath);
+                        break;
+                }
             }
         });
     }
