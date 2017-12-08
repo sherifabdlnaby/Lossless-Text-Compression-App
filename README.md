@@ -1,4 +1,4 @@
-# Cafe Simulator Using Java Threading
+# Lossless ASCII Text Compression Application
 A Java program that implements (4) four lossless text compression techniques for ASCII Text and compares compression ratio.
 
  - Lempel Ziv 1977
