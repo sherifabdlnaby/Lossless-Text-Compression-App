@@ -49,16 +49,16 @@ public class Dashboard extends JPanel {
                         ArithmeticSelect.setEnabled(true);
                         break;
                     case "lz77":
-                        decompressType.setText("LZ77Select - Lempel Ziv 1977");
+                        decompressType.setText("LZ77 - Lempel Ziv 1977");
                         break;
                     case "lzw":
-                        decompressType.setText("LZ77Select - Lempel Ziv Welch");
+                        decompressType.setText("LZ77 - Lempel Ziv Welch");
                         break;
                     case "huffman":
-                        decompressType.setText("HuffmanSelect Encoding");
+                        decompressType.setText("Huffman Encoding");
                         break;
                     case "art":
-                        decompressType.setText("ArithmeticSelect Coding");
+                        decompressType.setText("Arithmetic Coding");
                         break;
                     default:
                         compressButton.setEnabled(false);
@@ -105,7 +105,7 @@ public class Dashboard extends JPanel {
                                 "- Original Size = " + originalFileSize + " Byte.\n" +
                                 "- New Compressed Size = " + newFileSize + " Byte.\n" +
                                 "- Saved Bytes = " + savedBytes + " Byte.\n" +
-                                "- Compression = " + savedRatio * -1 + "%. The Original Size\n" +
+                                "- Compression = " + (savedRatio > 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
                                 (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
                         );
                         progressBar1.setValue(progressBar1.getValue() + incrementValue);
@@ -123,7 +123,7 @@ public class Dashboard extends JPanel {
                                         "- Original Size = " + originalFileSize + " Byte.\n" +
                                         "- New Compressed Size = " + newFileSize + " Byte.\n" +
                                         "- Saved Bytes = " + savedBytes + " Byte.\n" +
-                                        "- Compression = " + savedRatio * -1 + "%. The Original Size\n" +
+                                        "- Compression = " + (savedRatio > 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
                                         (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
                         );
                         progressBar1.setValue(progressBar1.getValue() + incrementValue);
@@ -141,7 +141,7 @@ public class Dashboard extends JPanel {
                                         "- Original Size = " + originalFileSize + " Byte.\n" +
                                         "- New Compressed Size = " + newFileSize + " Byte.\n" +
                                         "- Saved Bytes = " + savedBytes + " Byte.\n" +
-                                        "- Compression = " + savedRatio * -1 + "%. The Original Size\n" +
+                                        "- Compression = " + (savedRatio > 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
                                         (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
                         );
                         progressBar1.setValue(progressBar1.getValue() + incrementValue);
@@ -159,7 +159,7 @@ public class Dashboard extends JPanel {
                                         "- Original Size = " + originalFileSize + " Byte.\n" +
                                         "- New Compressed Size = " + newFileSize + " Byte.\n" +
                                         "- Saved Bytes = " + savedBytes + " Byte.\n" +
-                                        "- Compression = " + savedRatio * -1 + "%. The Original Size\n" +
+                                        "- Compression = " + (savedRatio > 0 ? "+" : "") + savedRatio * -1 + "% of the Original Size\n" +
                                         (savedRatio < 0 ? "* If Original File is too Small, compressed file may be bigger due to serialization overhead" : "")
                         );
                         progressBar1.setValue(progressBar1.getValue() + incrementValue);
@@ -177,20 +177,34 @@ public class Dashboard extends JPanel {
                 extension = extension.substring(extension.lastIndexOf('.')+1);
                 String filePath = File.getParent();
                 String fileName = File.getName();
-                switch (extension) {
-                    case "lz77":
-                        LZ77.Decompress(fileName, filePath);
-                        break;
-                    case "lzw":
-                        LZW.Decompress(fileName, filePath);
-                        break;
-                    case "huffman":
-                        Huffman.Decompress(fileName, filePath);
-                        break;
-                    case "art":
-                        Arithmetic.Decompress(fileName, filePath);
-                        break;
-                }
+                compressButton.setEnabled(false);
+                progressBar1.setValue(0);
+                console.setText("Running... \n");
+                final String extensionFinal = extension;
+                Thread procces = new Thread(() -> {
+                    switch (extensionFinal) {
+                        case "lz77":
+                            LZ77.Decompress(fileName, filePath);
+                            break;
+                        case "lzw":
+                            LZW.Decompress(fileName, filePath);
+                            break;
+                        case "huffman":
+                            Huffman.Decompress(fileName, filePath);
+                            break;
+                        case "art":
+                            Arithmetic.Decompress(fileName, filePath);
+                            break;
+                    }
+                    console.append(
+                            "================================================== \n" +
+                            "Decompression Completed 100% \n"
+                    );
+                    progressBar1.setValue(100);
+                    progressBar1.repaint();
+                    compressButton.setEnabled(true);
+                });
+                procces.start();
             }
         });
     }
