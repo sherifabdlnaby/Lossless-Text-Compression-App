@@ -1,6 +1,4 @@
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class Arithmetic {
@@ -114,7 +112,7 @@ public class Arithmetic {
         return decodedString.toString();
     }
 
-    public static boolean Compress(String inputString, String fileName, String filePath) {
+    public static long Compress(String inputString, String fileName, String filePath) {
         try {
             //Algorithm
             LinkedHashMap<Character, Double> probFillTable = new LinkedHashMap<>();
@@ -132,12 +130,13 @@ public class Arithmetic {
             objectOutputStream.writeObject(probFillTable);
             objectOutputStream.writeObject(EncodedDecimals);
             objectOutputStream.close();
-
+            //Get Compressed File Size
+            File newFile = new File(outputPath);
+            return newFile.length();
         } catch (IOException exception) {
             System.out.println(exception.getMessage());
-            return false;
+            return -1;
         }
-        return true;
     }
 
     public static boolean Decompress(String fileName, String filePath) {

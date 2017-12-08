@@ -98,7 +98,7 @@ public class LZ77 {
         return orignialString;
     }
 
-    public static boolean Compress(String inputString, String fileName, String filePath) {
+    public static long Compress(String inputString, String fileName, String filePath) {
         try {
             //Read Original File into String
             inputString = new String(Files.readAllBytes(Paths.get(filePath + "/" +fileName)));
@@ -117,11 +117,14 @@ public class LZ77 {
             //Write
             objectOutputStream.writeObject(tags);
             objectOutputStream.close();
+
+            //Get Compressed File Size
+            File newFile = new File(outputPath);
+            return newFile.length();
         } catch (IOException exception) {
             System.out.println(exception.getMessage());
-            return false;
+            return -1;
         }
-        return true;
     }
 
     public static boolean Decompress(String fileName, String filePath) {

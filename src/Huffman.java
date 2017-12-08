@@ -1,6 +1,4 @@
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class Huffman {
@@ -82,7 +80,7 @@ public class Huffman {
         return decompressedString.toString();
     }
 
-    public static boolean Compress(String inputString, String fileName, String filePath) {
+    public static long Compress(String inputString, String fileName, String filePath) {
         try {
             //Create HashTable Of Encoded and fill bitVector
             BitSet bitVector = new BitSet();
@@ -100,12 +98,13 @@ public class Huffman {
             objectOutputStream.writeObject(WriteTable);
             objectOutputStream.writeObject(bitVector);
             objectOutputStream.close();
-
+            //Get Compressed File Size
+            File newFile = new File(outputPath);
+            return newFile.length();
         } catch (IOException exception) {
             System.out.println(exception.getMessage());
-            return false;
+            return -1;
         }
-        return true;
     }
 
     public static boolean Decompress(String fileName, String filePath) {

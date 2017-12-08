@@ -81,7 +81,8 @@ public class LZW {
         return originalString.toString();
     }
 
-    public static boolean Compress(String inputString, String fileName, String filePath) {
+    //Returns number of bytes of the compressed file
+    public static long Compress(String inputString, String fileName, String filePath) {
         try {
             //Read Original File into String
             inputString = new String(Files.readAllBytes(Paths.get(filePath + "/" +fileName)));
@@ -100,11 +101,14 @@ public class LZW {
             //Write
             objectOutputStream.writeObject(tags);
             objectOutputStream.close();
+
+            //
+            File newFile = new File(outputPath);
+            return newFile.length();
         } catch (IOException exception) {
             System.out.println(exception.getMessage());
-            return false;
+            return -1;
         }
-        return true;
     }
 
     public static boolean Decompress(String fileName, String filePath) {
